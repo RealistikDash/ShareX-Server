@@ -1,5 +1,5 @@
-use actix_web::{get, Responder, web::Data};
 use crate::config::Config;
+use actix_web::{get, web::Data, Responder};
 
 #[get("/")]
 async fn main_get(config: Data<Config>) -> impl Responder {
