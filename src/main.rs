@@ -4,6 +4,7 @@ use std::sync::Mutex;
 
 mod config;
 mod database;
+mod sharex;
 mod web;
 
 #[actix_web::main]
