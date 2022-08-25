@@ -21,6 +21,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(config_arc.clone())
             .app_data(db_mutex.clone())
             .service(web::main::main_get)
+            .service(web::sharex::upload_post)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
