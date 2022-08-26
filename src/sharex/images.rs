@@ -1,5 +1,7 @@
 use rand::{distributions::Alphanumeric, distributions::DistString};
 use std::path::Path;
+use actix_web::web::Bytes;
+use crate::sharex::users::User;
 
 pub enum ImageTypes {
     PNG,
@@ -50,4 +52,8 @@ fn detect_type(file: Vec<u8>) -> Option<ImageTypes> {
     } else {
         None
     }
+}
+
+pub fn upload_image(user: &User, image: &Bytes) -> Result<String, ()> {
+    
 }

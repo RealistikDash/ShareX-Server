@@ -2,6 +2,7 @@ use actix_web::{web::Data, post, web::Bytes, Responder, HttpRequest, HttpRespons
 use sqlite::Connection;
 use std::sync::Mutex;
 use crate::sharex::images;
+use crate::sharex::users;
 use serde_json::json;
 
 type DatabaseData = Data<Mutex<Connection>>;
@@ -24,8 +25,19 @@ async fn upload_post(req: HttpRequest, db: DatabaseData, image: Bytes) -> impl R
     let token_option = header_string(&req, "Authorisation");
     
     if let Some(token) = token_option {
-        HttpResponse::new(StatusCode::ACCEPTED)
-        .set_body("Bruh".to_string())
+        let db = db.lock().unwrap();
+        if let Some(user) = users::fetch_user_key(&db, token)  {
+            // File upload stuff.
+            HttpResponse::new(StatusCode::ACCEPTED)
+            .set_body(json!({
+                "message": "Success!"
+            }).to_string())
+        } else {
+            HttpResponse::new(StatusCode::FORBIDDEN)
+            .set_body(json!({
+                "message": "Auth error!"
+            }).to_string())
+        }
     } else {
         HttpResponse::new(StatusCode::FORBIDDEN)
         .set_body(json!({

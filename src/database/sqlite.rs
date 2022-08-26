@@ -14,7 +14,8 @@ fn create_base_tables(conn: &sqlite::Connection) -> sqlite::Result<()> {
         "CREATE TABLE IF NOT EXISTS uploads (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             filename TEXT NOT NULL,
-            timestamp INTEGER
+            timestamp INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
         );",
     )?;
 
