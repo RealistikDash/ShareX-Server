@@ -1,4 +1,5 @@
 use sqlite::{Connection, State};
+use crate::sharex::utils;
 
 pub struct User {
     pub id: i64,
@@ -22,3 +23,18 @@ pub fn fetch_user_key(conn: &Connection, access_key: String) -> Option<User> {
         None
     }
 }
+
+const ACCESS_KEY_LEN: usize = 16;
+
+pub fn register_user(username: String, conn: &Connection) -> User {
+    let access_key = utils::random_string(16);
+    let query = conn.prepare(
+        "INSERT INTO users (username, access_key) VALUES (?, ?)"
+    )
+    .unwrap()
+    .bind(1, username.as_str())
+    .unwrap()
+    .bind(2, access_key.as_str())
+    .unwrap();
+
+    Statement

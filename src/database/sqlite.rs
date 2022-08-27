@@ -15,7 +15,7 @@ fn create_base_tables(conn: &sqlite::Connection) -> sqlite::Result<()> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             filename TEXT NOT NULL,
             timestamp INTEGER NOT NULL,
-            user_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL
         );",
     )?;
 
