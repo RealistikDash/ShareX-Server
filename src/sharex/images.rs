@@ -1,8 +1,8 @@
-use std::path::Path;
-use std::fs;
-use actix_web::web::Bytes;
 use crate::sharex::users::User;
 use crate::sharex::utils;
+use actix_web::web::Bytes;
+use std::fs;
+use std::path::Path;
 
 pub enum ImageTypes {
     PNG,
@@ -25,7 +25,11 @@ const NAME_LEN: usize = 8;
 /// Generates a unique filename, ensuring no files are overwritten.
 pub fn generate_unique_filename(save_path: String, extension: ImageTypes) -> String {
     loop {
-        let file_name = format!("{}.{}", utils::random_string(NAME_LEN), extension.into_extension());
+        let file_name = format!(
+            "{}.{}",
+            utils::random_string(NAME_LEN),
+            extension.into_extension()
+        );
         let file_path = format!("{}/{}", save_path, file_name);
         let path = Path::new(&file_path);
 
@@ -46,7 +50,7 @@ fn detect_type(file: &Vec<u8>) -> Option<ImageTypes> {
         Some(ImageTypes::PNG)
     } else if &file[6..10] == JPG_SLICE {
         Some(ImageTypes::JPG)
-    }  else if &file[..4] == GIF_SLICE {
+    } else if &file[..4] == GIF_SLICE {
         Some(ImageTypes::GIF)
     } else {
         None
@@ -59,7 +63,7 @@ fn write_image(image: &Bytes, path: &String) {
 
 pub fn upload_image(user: &User, image: &Bytes, save_path: String) -> Result<String, ()> {
     let extension_option = detect_type(&image.to_vec());
-    
+
     if let None = extension_option {
         return Err(());
     }
